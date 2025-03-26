@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File
+from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File, WebSocket
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from datetime import timedelta
+from datetime import timedelta, datetime
 from . import crud, models, schemas
 from .database import engine, get_db, create_document, get_document, update_document, delete_document
 from .auth.utils import (
@@ -12,6 +12,11 @@ from .auth.utils import (
 from .models.user import UserRole, UserCreate, User
 from .models.lab_test import LabTestCreate, LabTest, TestStatus
 from .models.patient import PatientCreate, Patient
+from .models.doctor import DoctorCreate, Doctor
+from .models.appointment import AppointmentCreate, Appointment, AppointmentStatus
+from .websocket import handle_websocket
+from .storage import save_upload_file, delete_file
+import json
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
